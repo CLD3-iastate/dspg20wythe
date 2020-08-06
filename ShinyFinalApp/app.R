@@ -409,12 +409,13 @@ shinyApp(
                                )
                                
                       )
-                    ),
+                    ),  
+                    
                     br(),
                     h3("Colleges and Universities"),
                     p("The foregoing analysis motivated the team to examine Wythe County’s access to institutions that provide high-quality, high-impact training. The dashboard above shows access measures for education and workforce training for Wythe County and the surrounding region. The workforce training, community college, and four-year college and university measures are counts of these locations within a chosen travel time from the population weighted county centroid."),
                     p("For example, Wythe County has three colleges and universities located within a 60-minute drive of most of the population. If, however, one narrows the time window to 30 minutes, there is only one. Further exploration of the dashboard shows that this institution is a community college, which may play an important role in providing workforce training. As is clear from the colors on the maps, Wythe is well positioned in terms of access to continuing and higher education facilities."),
-                    
+                  
                     br(),
                     h3("Broadband and High Schools"),
                     p("High schools also play a large role in training future workers. Trade and vocational programs can offer future career paths for many students who do not pursue additional education beyond a high school diploma. This second dashboard shows that Wythe County has three high schools."),
@@ -791,7 +792,7 @@ shinyApp(
           ggplot(mapping=aes(x=fct_inorder(name),y=value,fill=fct_inorder(name)))+
           geom_bar(stat = "identity")+
           scale_fill_viridis(discrete = T)+
-          labs (title="Home Values",y="Number of Homes",x="")+
+          labs (title="Home Values",y="Percent of Homes",x="")+
           theme_minimal()+
           theme(legend.position = "none", axis.title.y = element_text(size=14, face="bold"), plot.title = element_text(size = 18, face = "bold"), axis.text.x =element_text(angle=45, size = 14, hjust=1,vjust=1, face = "bold"))
       }
@@ -805,7 +806,7 @@ shinyApp(
           ggplot(mapping=aes(x=name,y=value,fill=name))+
           geom_col()+
           scale_fill_viridis(discrete = T)+
-          labs (title="Household Size",y="Households",x="")+
+          labs (title="Household Size",y="Percent of Households",x="")+
           theme_minimal()+
           theme(legend.position = "none", axis.text.x =element_text(size = 12, face = "bold"), plot.title = element_text(size=18, face="bold"), axis.title.x = element_text(size=14, face="bold"), axis.title.y = element_text(size=14, face="bold"))
       }
@@ -814,7 +815,7 @@ shinyApp(
           ggplot(mapping=aes(x=fct_inorder(name),y=value,fill=fct_inorder(name)))+
           geom_col()+
           scale_fill_viridis(discrete = T)+
-          labs (title="Highest Level of Education (Age > 25)",y="Population",x="")+
+          labs (title="Highest Level of Education (Age > 25)",y="Percent of Population",x="")+
           theme_minimal()+
           theme(legend.position = "none", plot.title = element_text(size=18, face="bold"), axis.title.x = element_text(size=14, face="bold"), axis.text.x =element_text(size = 12, face = "bold"), axis.title.y = element_text(size=14, face="bold"))
       }
@@ -823,7 +824,7 @@ shinyApp(
           ggplot(mapping=aes(x=fct_inorder(name),y=value,fill=fct_inorder(name)))+
           geom_bar(stat = "identity")+
           scale_fill_viridis(discrete = T)+
-          labs (title="Household Income",y="Households",x="")+
+          labs (title="Household Income",y="Percent of Households",x="")+
           theme_minimal()+
           theme(legend.position = "none",plot.title = element_text(size=18, face="bold"), axis.title.y = element_text(size=14, face="bold"),axis.text.x =element_text(angle=45,hjust=1,vjust=1, size = 14, face = "bold"))
       }
@@ -832,7 +833,7 @@ shinyApp(
           ggplot(mapping=aes(x=name,y=value,fill=name))+
           geom_bar(stat = "identity")+
           scale_fill_viridis(discrete = T)+
-          labs (title="Employment by Industry",y="Population",x="")+
+          labs (title="Employment by Industry",y="Percent of Population",x="")+
           theme_minimal()+
           theme(legend.position = "none",axis.text.x =element_text(angle=65,hjust=1,vjust=1,size=12), plot.title = element_text(size=18, face="bold"), axis.title.y = element_text(size=14, face="bold"))
       }
