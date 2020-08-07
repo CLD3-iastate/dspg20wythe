@@ -190,7 +190,7 @@ shinyApp(
                       h3("References:"),
                       p("Acemoglu, D. (2012). 'What does human capital do? A review of Goldin and Katz's The race between education and technology.' Journal of Economic Literature 50(2), 426-63."),
                       p("Goldin, Claudia Dale and Katz, Lawrence F. 2009. The race between education and technology. Harvard University Press."),
-                      p("Lamb, William B and Sherman, Hugh (2010). “Developing high-growth businesses in rural areas: A study of four US States.” New England Journal of Entrepreneurship 12(2).")
+                      p("Lamb, William B and Sherman, Hugh (2010). 'Developing high-growth businesses in rural areas: A study of four US States.' New England Journal of Entrepreneurship 12(2).")
                       
                     )
                   )),
