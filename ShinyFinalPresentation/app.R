@@ -24,8 +24,9 @@ library(tigris)
 #library(ggplot2)
 #library(scales)
 #library(nycflights13)
+#install.packages("rsconnect")
 library(rsconnect)
-#rsconnect::deployApp('~/git/Project_Wythe_County/ShinyFinalPresentation', account = "wythecountydash")
+#rsconnect::deployApp('~/git/WytheFinalDash/ShinyFinalPresentation', account = "wythecountydash")
 
 
 source("theme.R")
@@ -54,7 +55,7 @@ Tree_Man_Ex<-read_csv("Trees/Tree_Man_Ex")
 #Tree_Man_Job<-read_csv("Trees/Tree_Man_Job")
 Tree_Man_Site<-read_csv("Trees/Tree_Man_Site")
 
-Wythe_long<-read_csv("Wythe_long")
+Wythe_long<-read_csv("data/Wythe_long")
 # Get VA County Outlines
 acs_Wythe_area <- readRDS("isochrones/acs_Wythe_area.rds")
 va_sf<-readRDS("isochrones/va_sf.rds")
@@ -89,8 +90,8 @@ va_sf<-readRDS("data/va_sf.rds")
 # Get Page County outline
 Wythe_outline<-readRDS("data/Wythe_outline.rds")
 Wythe_area_outline<-readRDS("data/Wythe_area_outline.rds")
-bps_final_Wythe<- readRDS(file = "bps_final_Wythe.rds")
-f<- readRDS(file = "housing_ages.rds")
+bps_final_Wythe<- readRDS(file = "data/bps_final_Wythe.rds")
+f<- readRDS(file = "data/housing_ages.rds")
 
 shinyApp(
   ui = dashboardPagePlus(
@@ -188,6 +189,7 @@ shinyApp(
                       p("In our project we provide a visual overview of the built/physical capital available in Wythe County.  Based on this framework, our team combined publicly available demographic, infrastructure, and labor information related to the current and potential workforce in Wythe County. The data were used to identify the human capital in Wythe, assess the potential of Wythe County to train its workforce in various industries, and construct a spatial measure of accessibility to education and workforce training centers."),
                       
                       h3("References:"),
+
                       p("Acemoglu, D. (2012). 'What does human capital do? A review of Goldin and Katz's The race between education and technology.' Journal of Economic Literature 50(2), 426-63."),
                       p("Goldin, Claudia Dale and Katz, Lawrence F. 2009. The race between education and technology. Harvard University Press."),
                       p("Lamb, William B and Sherman, Hugh (2010). 'Developing high-growth businesses in rural areas: A study of four US States.' New England Journal of Entrepreneurship 12(2).")
@@ -238,8 +240,10 @@ shinyApp(
                       p("2. No. of community colleges within 30 (45, 60) minute driving distance of the county"),
                       p("3. No. of four-year colleges and universities within 30 (45, 60) minute driving distance of the county"),
                       h3("References:"),
+
                       p("Luo, Wei and Wang, Fahui (2003). 'Measures of spatial accessibility to health care in a GIS environment: synthesis and a case study in the Chicago region.' Environment and Planning B: Planning and Design 30(6):865—884."),
                       p("Waldorf, B. S., & Chen, S. E. (2010). 'Spatial models of health outcomes and health behaviors: the role of health care accessibility and availability.' In Progress in spatial analysis (339-362). Springer: Berlin, Heidelberg.")
+
                     )
                   )),
           
