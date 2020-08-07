@@ -14,6 +14,7 @@ library(dplyr)
 library(tidycensus)
 library(sp)
 library(readxl)
+library(tigris)
 #library(RColorBrewer)
 #library(osmdata)
 #library(purrr)
@@ -61,6 +62,10 @@ va_sf<-readRDS("isochrones/va_sf.rds")
 Wythe_outline<-readRDS("isochrones/Wythe_outline.rds")
 Wythe_area_outline<-readRDS("isochrones/Wythe_area_outline.rds")
 
+Cities_and_Towns<-st_read("data/Cities_and_Towns_NTAD.shx")%>%
+  filter(state_fips=="51")
+Power_Plants<-st_read("data/Power_Plants.shx")%>%
+  filter(STATE=="VA")
 mapVA_county <- st_read("data/cb_2018_us_county_5m.shp",
                         stringsAsFactors = FALSE) %>% filter(STATEFP == "51")
 mapVA_county$COUNTYFP <- as.numeric(mapVA_county$COUNTYFP)
@@ -159,7 +164,19 @@ shinyApp(
                       h2("Project Description"),
                       p("Wythe County is a rural community in Southwest Virginia with a population of 28,684 (2019 estimate). It was founded in 1790 and sits at the confluence of two major highways, Interstates 77 and 81, which facilitate easy access to major markets and population centers along the Eastern Seaboard and in Midwestern and Southern states. In recent years, Wythe County has had success in attracting manufacturing facilities and travel-related businesses, and it has worked to expand the variety of tourism and hospitality options available. Like other communities in Appalachia, it has faced a declining population over the past decade. As a result, county leaders are seeking new ways to attract and retain companies, workers and residents. "),
                       br(),
-                      div(img(src = 'Wythe.png', height = "200", width = "375"), style="text-align: center;","[1]"),
+                      boxPlus(
+                        title = "Wythe County",
+                        closable = FALSE,
+                        status = "warning",
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
+                        width = NULL,
+                        #enable_dropdown = TRUE,
+                        #dropdown_icon = "",
+                        #dropdown_menu = tagList(selectInput("var","Select a Variable",choices = c("Level of Education","Industry","Home Values","Household Income","Household Size"))),
+                        leafletOutput("wythe")
+                      ),
+                        
                       h2("Project Goals"),
                       p("We partnered with Virginia Cooperative Extension to contextualize industry and workforce factors at levels that are actionable for stakeholders and that promote informed policy and investment in Wythe County amenities and infrastructure. We identified industries and particular jobs within those industries that are expected to grow rapidly in the future. We visualized these jobs by both the skill set and education-level necessary for vocational success. We then created measures to help stakeholders assess the ability of Wythe County and the surrounding region to train the workforce of tomorrow."),
                       
@@ -231,7 +248,18 @@ shinyApp(
                     h2("Transportation and Access to Major Markets for Firms"),
                     p("To understand the full suite of amenities available to HGBs in Wythe, we used publicly available demographic and infrastructure data to provide an overview of the built capital amenities in Wythe."),
                     p("In many respects, Wythe County is uniquely endowed with built amenities attractive to businesses (William and Lamb, 2010).  It is situated at the intersection of two major interstates, and it is within a six-to-eight-hour drive of most of the population in the United States. As the map shows, it also has easy access to rail and other supporting infrastructure (e.g., powerplants) for commerce and manufacturing. From an “access to major markets” perspective, Wythe is an attractive location for both light and heavy industry."),
-                    img(src = 'infrastructure.png', height = "450", width = "600", align = "center"),
+                    boxPlus(
+                      title = "Wythe County Infrastructure",
+                      closable = FALSE,
+                      status = "warning",
+                      solidHeader = TRUE,
+                      collapsible = TRUE,
+                      width = NULL,
+                      #enable_dropdown = TRUE,
+                      #dropdown_icon = "",
+                      #dropdown_menu = tagList(selectInput("var","Select a Variable",choices = c("Level of Education","Industry","Home Values","Household Income","Household Size"))),
+                      leafletOutput("wythe_infrastructure")
+                    ),
                     h2("Land & Housing"),
                     p("One of the attractive features of rural America is the cost of land and housing.  Technology companies, for example, which often require land intensive sites for data centers, may find rural locations increasingly appealing. The cost of housing, the low time travel cost, and the attractive recreational and natural amenities may also be important attributes to attract and retain employers and employees alike. The cost of housing in Wythe is very reasonable; a large proportion of homes are valued below $150,000. The housing stock in Wythe is, however, aging and limited (see graphs in dashboard below)."),
                     boxPlus(
@@ -410,7 +438,15 @@ shinyApp(
                                
                       )
                     ),  
-                    
+                    br(),
+                    br(),
+                    br(),
+                    br(),
+                    br(),
+                    br(),
+                    br(),
+                    br(),
+                    br(),
                     br(),
                     h3("Colleges and Universities"),
                     p("The foregoing analysis motivated the team to examine Wythe County’s access to institutions that provide high-quality, high-impact training. The dashboard above shows access measures for education and workforce training for Wythe County and the surrounding region. The workforce training, community college, and four-year college and university measures are counts of these locations within a chosen travel time from the population weighted county centroid."),
@@ -1211,5 +1247,24 @@ shinyApp(
       
       
     })
+    
+    output$wythe<-renderLeaflet({
+      leaflet() %>%
+        addTiles() %>%
+        addPolylines(data = tigris::counties(state="51",cb=T,class="sf"), color = "black", weight = 1)%>%
+        addPolygons(data = Wythe_outline, color = "red", fillColor="red", fillOpacity = .6, weight = 1)
+    })
+    
+    output$wythe_infrastructure<-renderLeaflet({
+      leaflet() %>%
+        addTiles() %>%
+        addPolylines(data = tigris::counties(state="51",cb=T,class="sf"), color = "black", weight = 1)%>%
+        addPolygons(data = Wythe_outline, color = "grey", weight = 1)%>%
+        addCircles(lat=Power_Plants$LATITUDE, lng=Power_Plants$LONGITUDE, color="blue",radius = 50)%>%
+        addCircles(lat=Cities_and_Towns$latitude, lng=Cities_and_Towns$longitude, color="red",radius = 50)%>%
+        setView(lat=36.9541936,lng=-81.101218,zoom = 9)%>%
+        addLegend(colors = c("blue","red"),labels=c("Power Plants", "Cities and Towns"))
+    })
+    
   }
     )
