@@ -15,6 +15,7 @@ library(tidycensus)
 library(sp)
 library(readxl)
 library(tigris)
+library(shinyjs)
 #library(RColorBrewer)
 #library(osmdata)
 #library(purrr)
@@ -91,7 +92,22 @@ va_sf<-readRDS("data/va_sf.rds")
 Wythe_outline<-readRDS("data/Wythe_outline.rds")
 Wythe_area_outline<-readRDS("data/Wythe_area_outline.rds")
 bps_final_Wythe<- readRDS(file = "data/bps_final_Wythe.rds")
-f<- readRDS(file = "data/housing_ages.rds")
+f <- readRDS(file = "data/housing_ages.rds")
+
+jscode <-  "var referer = document.referrer;
+           var n = referer.includes('economic');
+           var x = document.getElementsByClassName('logo');
+           if (n != true) {
+             x[0].innerHTML = '<a href=\"https://datascienceforthepublicgood.org/events/symposium2020/poster-sessions\">' +
+                              '<img src=\"DSPG_white-01.png\", alt=\"DSPG 2020 Symposium Proceedings\", style=\"height:42px;\">' +
+                             '</a>';
+           } else {
+             x[0].innerHTML = '<a href=\"https://datascienceforthepublicgood.org/economic-mobility/community-insights\">' +
+                              '<img src=\"AEMLogoGatesColors-11.png\", alt=\"Gates Economic Mobility Case Studies\", style=\"height:42px;\">' +
+                              '</a>';
+           }"
+           
+
 
 shinyApp(
   ui = dashboardPagePlus(
@@ -149,6 +165,7 @@ shinyApp(
     
     # BODY --------------------------------------------------------------------
     body = dashboardBody(
+      useShinyjs(),
       customTheme,
       fluidPage(
         tabItems(
@@ -529,6 +546,9 @@ shinyApp(
   
   # SERVER ------------------------------------------------------------------
   server = function(input, output) {
+    
+    runjs(jscode)
+    
     # Render Trees
     output$mytree <- renderCollapsibleTree({
       if(input$var1%in%"Skills"){
