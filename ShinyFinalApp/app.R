@@ -14,6 +14,7 @@ library(dplyr)
 library(tidycensus)
 library(sp)
 library(readxl)
+library(shinyjs)
 #library(RColorBrewer)
 #library(osmdata)
 #library(purrr)
@@ -87,11 +88,29 @@ Wythe_area_outline<-readRDS("data/Wythe_area_outline.rds")
 bps_final_Wythe<- readRDS(file = "bps_final_Wythe.rds")
 f<- readRDS(file = "housing_ages.rds")
 
+
+jscode <- "var referer = document.referrer;
+           var n = referer.includes('economic');
+           var x = document.getElementsByClassName('logo');
+           if (n != true) {
+             x[0].innerHTML = '<a href=\"https://datascienceforthepublicgood.org/events/symposium2020/poster-sessions\">' +
+                              '<img src=\"DSPG_white-01.png\", alt=\"DSPG 2020 Symposium Proceedings\", style=\"height:42px;\">' +
+                             '</a>';
+           } else {
+             x[0].innerHTML = '<a href=\"https://datascienceforthepublicgood.org/economic-mobility/community-insights\">' +
+                              '<img src=\"AEMLogoGatesColors-11.png\", alt=\"Gates Economic Mobility Case Studies\", style=\"height:42px;\">' +
+                              '</a>';
+           }
+           "
+
+
 shinyApp(
   ui = dashboardPagePlus(
     title = "DashboardPage",
-    header = dashboardHeaderPlus(
-      title = "DSPG 2020"
+    
+    # UI: Dashboard header -------
+    dashboardHeaderPlus(
+      left_menu = tagList(div("Industry and Workforce Attraction and Retention in Wythe County", style="height:35px; display:flex; align-items: center;"))
     ),
     
     # SIDEBAR (LEFT) ----------------------------------------------------------
@@ -143,6 +162,7 @@ shinyApp(
     
     # BODY --------------------------------------------------------------------
     body = dashboardBody(
+      useShinyjs(),
       customTheme,
       fluidPage(
         tabItems(
@@ -489,6 +509,9 @@ shinyApp(
   
   # SERVER ------------------------------------------------------------------
   server = function(input, output) {
+    # Run JavaScript Code
+    runjs(jscode)
+    
     # Render Trees
     output$mytree <- renderCollapsibleTree({
       if(input$var1%in%"Skills"){
