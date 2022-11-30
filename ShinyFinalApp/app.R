@@ -1,7 +1,7 @@
 library(shiny)
 library(shinyWidgets)
 library(shinydashboard)
-library(shinydashboardPlus)
+library(shinydashboardPlus) # Uses version 0.7.5
 library(leaflet)
 library(dashboardthemes)
 library(readr)
